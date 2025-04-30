@@ -1,30 +1,38 @@
 local QBCore = nil
 local ESX = nil
-
+local idDead = false
 if Config.FrameWork == "QBCore" then
     QBCore = exports['qb-core']:GetCoreObject()
 elseif Config.FrameWork == "ESX" then
     ESX = exports["es_extended"]:getSharedObject()
 end
-
+print("FIX BY ELIASEECL")
 local Loaded = false
-
 
 if Config.FrameWork == "ESX" then
     RegisterNetEvent('esx:playerLoaded')
     AddEventHandler('esx:playerLoaded',function()
         lib.print.info("Hud Loaded")
         lib.notify({
-            title = 'as-hud',
-            description = 'Hud loaded',
+            title = 'Bienvenido',
+            description = 'Bienvenido a ELIASEECL SHOP',
             type = 'success'
         })
     Loaded = true
     end)
 
+    AddEventHandler('esx:onPlayerSpawn', function(spawn)
+        isDead = false
+    end)
+
     RegisterNetEvent('esx:onPlayerLogout', function()
         Loaded = false
     end)
+
+    AddEventHandler('esx:onPlayerDeath', function(data)
+        isDead = true
+    end)
+    
 
 elseif Config.FrameWork == "QBCore" then
     AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
@@ -58,71 +66,36 @@ if Config.FrameWork == "QBCore" then
         Loaded = false
     end)
 else 
-    print("nthng detected")
+    Loaded = true
 end
 end)
-CreateThread(function()
-    while true do
-        SetRadarBigmapEnabled(false, false)
-        Wait(500)
-    end
+
+ CreateThread(function()
+    SetMapZoomDataLevel(0, 0.96, 0.9, 0.08, 0.0, 0.0)
+    SetMapZoomDataLevel(1, 1.6, 0.9, 0.08, 0.0, 0.0)
+    SetMapZoomDataLevel(2, 8.6, 0.9, 0.08, 0.0, 0.0)
+    SetMapZoomDataLevel(3, 12.3, 0.9, 0.08, 0.0, 0.0)
+    SetMapZoomDataLevel(4, 22.3, 0.9, 0.08, 0.0, 0.0)
 end)
 
-
 CreateThread(function()
-    local minimap = RequestScaleformMovie('minimap')
-    if not HasScaleformMovieLoaded(minimap) then
-        RequestScaleformMovie(minimap)
-        while not HasScaleformMovieLoaded(minimap) do
-            Wait(1)
+    local time = 1000
+    while true do 
+        local vehicle = IsPedInAnyVehicle(PlayerPedId(), false)
+        if not vehicle then
+            DisplayRadar(false)
+            SetRadarZoom(1100)
+        else
+            DisplayRadar(true)
         end
+        Wait(time)
     end
-end)
-
-CreateThread(function()
-    TriggerEvent('LoadMap')
-    DisplayRadar(false)
-end)
-
-RegisterNetEvent('LoadMap')
-AddEventHandler('LoadMap', function()
-    Wait(50)
-
-    local defaultAspectRatio = 1920 / 1080
-    local resolutionX, resolutionY = GetActiveScreenResolution()
-    local aspectRatio = resolutionX / resolutionY
-    local minimapOffset = 0
-
-    if aspectRatio > defaultAspectRatio then
-        minimapOffset = ((defaultAspectRatio - aspectRatio) / 3.6) - 0.008
-    end
-
-    RequestStreamedTextureDict('squaremap', false)
-
-    if not HasStreamedTextureDictLoaded('squaremap') then
-        Wait(150)
-    end
-
-    SetMinimapClipType(0)
-    AddReplaceTexture('platform:/textures/graphics', 'radarmasksm', 'squaremap', 'radarmasksm')
-    AddReplaceTexture('platform:/textures/graphics', 'radarmask1g', 'squaremap', 'radarmasksm')
-
-    SetMinimapComponentPosition('minimap', 'L', 'B', 0.0 + minimapOffset, -0.047, 0.1638, 0.183)
-    SetMinimapComponentPosition('minimap_mask', 'L', 'B', 0.0 + minimapOffset, 0.0, 0.128, 0.20)
-    SetMinimapComponentPosition('minimap_blur', 'L', 'B', -0.01 + minimapOffset, 0.025, 0.262, 0.300)
-    SetBlipAlpha(GetNorthRadarBlip(), 0)
-    SetRadarBigmapEnabled(true, false)
-    SetMinimapClipType(0)
-    Wait(50)
-    SetRadarBigmapEnabled(false, false)
 end)
 
 
 CreateThread(function()
     while true do
-        Wait(0)
         if Loaded then
-            DisplayRadar(1)
             local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
            
             if DoesEntityExist(vehicle) and GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
@@ -162,9 +135,16 @@ CreateThread(function()
                 thirst = QBCore.Functions.GetPlayerData().metadata['thirst']
                 hunger = QBCore.Functions.GetPlayerData().metadata['hunger']
             end
-
+            
             local armor = GetPedArmour(cache.ped)
             local health = GetEntityHealth(cache.ped) - 100
+            
+            if isDead then
+                armor = 0
+                health = 0
+            end
+            
+            
             SendNUIMessage({
                 action = 'updateArmor',
                 armor = armor
@@ -177,5 +157,6 @@ CreateThread(function()
                 armor = armor
             })
         end
+    Wait(200)
     end
 end)
