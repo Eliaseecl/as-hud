@@ -2,7 +2,7 @@ fx_version 'adamant'
 
 game 'gta5'
 
-author 'Astro'
+author 'Astro - fix for esx by eliaseecl'
 version '1.0'
 
 ui_page 'web/ui.html'
