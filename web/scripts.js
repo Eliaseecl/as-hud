@@ -23,12 +23,17 @@ window.addEventListener("message", (event) => {
         case "setBoxes":
             $("#ui-container").fadeIn(150);
             updateBoxes(data.thirst, data.health, data.hunger, data.armor);
+            
             break;
 
         case "updateSpeedometer":
             $(".speedometer").fadeIn(100);
             $(".fuel-info").fadeIn(100);
             updateSpeedometer(data.speed, data.fuel);
+            $("#ui-container").css({
+				bottom: "30px",
+                left: "320px",
+			});
             break;
         
             case "updateTalkingStatus":
@@ -37,6 +42,12 @@ window.addEventListener("message", (event) => {
                 case "hidespeed":
                     $(".speedometer").fadeOut(100);
                     $(".fuel-info").fadeOut(100);
+                    $("#ui-container").css({
+                        bottom: "30px",
+                        left: "30px",
+                        
+                    });
+                    document.getElementById('ui-container').style.transition = "all 0.5s";
                     break;        
                     case "updateArmor":
             updateArmor(data.armor);
