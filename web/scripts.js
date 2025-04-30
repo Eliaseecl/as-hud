@@ -1,102 +1,54 @@
-// scripts.js
-// script.js
-window.addEventListener("message", (event) => {
-    if (event.data.action === "setBoxes") {
-        updateBox('thirst', event.data.thirst);
-        updateBox('health', event.data.health);
-        updateBox('hunger', event.data.hunger);
-    }
-});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom UI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- Include Font Awesome CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="ui-container">
+        <div class="box" id="thirst-box">
+            <i class="fas fa-droplet icon"></i>
+            <div class="fill" id="thirst-fill"></div>
+        </div>
+        <div class="box" id="hunger-box">
+            <i class="fas fa-burger icon"></i>
+            <div class="fill" id="hunger-fill"></div>
+        </div>
+        <div class="box" id="health-box">
+            <i class="fas fa-heart-pulse icon"></i>
+            <div class="fill" id="health-fill"></div>
+        </div>
+        <div class="box" id="armor-box">
+            <i class="fas fa-shield icon"></i>
+            <div class="fill" id="armor-fill"></div>
+        </div>       
+  </div>
+  <div class="speedometer" id="speedometer">
+    <div class="speedometer-text">0</div>
+    <div class="speedometer-unit">KM/H</div>
+</div>
 
-function updateBox(boxId, fillPercentage) {
-    const fillElement = document.getElementById(`${boxId}-fill`);
-    fillElement.style.height = fillPercentage + '%';
-}
+<div class="fuel-info" id="fuelInfo">
+    <div class="fuel-icon-value">
+        <i class="fas fa-gas-pump"></i>
+        <div class="fuel-value" id="fuelValue">75</div>
+        <div class="fuel-unit">L</div>
+    </div>
+</div>
 
-// Example usage: updateBoxes(50, 80, 30);
+<div class="sound-icon" id="soundIcon">
+  <i id="isound"></i>
+</div>
 
-window.addEventListener("message", (event) => {
-    const data = event.data;
+    <script src="scripts.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    switch (data.action) {
-
-        case "setBoxes":
-            $("#ui-container").fadeIn(150);
-            updateBoxes(data.thirst, data.health, data.hunger, data.armor);
-            
-            break;
-
-        case "updateSpeedometer":
-            $(".speedometer").fadeIn(100);
-            $(".fuel-info").fadeIn(100);
-            updateSpeedometer(data.speed, data.fuel);
-            $("#ui-container").css({
-				bottom: "30px",
-                left: "320px",
-			});
-            break;
-        
-            case "updateTalkingStatus":
-                updateTalkingStatus(data.isTalking);
-                break;
-                case "hidespeed":
-                    $(".speedometer").fadeOut(100);
-                    $(".fuel-info").fadeOut(100);
-                    $("#ui-container").css({
-                        bottom: "30px",
-                        left: "30px",
-                        
-                    });
-                    document.getElementById('ui-container').style.transition = "all 0.5s";
-                    break;        
-                    case "updateArmor":
-            updateArmor(data.armor);
-            break;
-    
-    }
-});
-
-function toggleHUD(show) {
-    document.getElementById('ui-container').style.display = show ? 'flex' : 'none';
-}
-
-function updateBoxes(thirst, health, hunger, armor) {
-
-    updateBox('thirst', thirst);
-    updateBox('health', health);
-    updateBox('hunger', hunger);
-    updateBox('armor', armor);
-}
-
-function updateBox(boxId, fillPercentage) {
-    const fillElement = document.getElementById(`${boxId}-fill`);
-    fillElement.style.height = fillPercentage + '%';
-}
-
-function updateSpeedometer(speed, fuel) {
-    const speedometerText = document.querySelector('.speedometer-text');
-    speedometerText.innerText = speed;
-
-    const fuelValue = document.getElementById('fuelValue');
-    fuelValue.innerText = Math.floor(fuel);
-}
-
-function updateTalkingStatus(isTalking) {
-    const soundIcon = document.getElementById('isound');
-    
-    if (isTalking) {
-        $(".sound-icon").fadeIn(150);
-        soundIcon.className = 'fas fa-microphone';
-
-    } else {
-        $(".sound-icon").fadeOut(150);
-    }
-}
-function updateArmor(armor) {
-    if (armor > 0) {
-        $(".box#armor-box").fadeIn(100);
-        updateBox('armor', armor);
-    } else {
-        $(".box#armor-box").fadeOut(100);
-    }
-}
+</body>
+</html>
