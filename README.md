@@ -3,6 +3,7 @@
 ![Hud Screenshot](https://i.imgur.com/giqDiHN.png)
 
 ## Description
+A more optimized and adapted version for better performance on ESX
 
 its a basic optimised hud for qbcore , it will be updated in the future , its just the first version :)
 Working For both of QBCore and ESX and with all fuel script , Converted To Esx By : [ytBeKuhl](https://github.com/ytBeKuhl)
